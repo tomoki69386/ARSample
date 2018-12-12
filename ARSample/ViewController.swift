@@ -13,6 +13,7 @@ import SceneKit
 class ViewController: UIViewController {
     
     @IBOutlet var sceneView: ARSCNView!
+    private var hogeView = SCNNode()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +37,7 @@ class ViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        hogeView.removeFromParentNode()
         let baseView = customView(frame: view.bounds)
         guard let image = createImage(view: baseView) else { return }
         let node = WebNode(image: image, panelColor: UIColor.green, width: 0.5)
@@ -45,6 +47,7 @@ class ViewController: UIViewController {
             node.position = camera.convertPosition(position, to: nil) // カメラ位置からの偏差で求めた位置
         }
         sceneView.scene.rootNode.addChildNode(node) // 生成したノードをシーンに追加する
+        hogeView = node
     }
     
     /// view to image
