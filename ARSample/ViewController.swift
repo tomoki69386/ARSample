@@ -36,25 +36,28 @@ class ViewController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        let node = SCNNode() // ノードを生成
-        node.geometry = SCNBox(width: 0.2, height: 0.1, length: 0, chamferRadius: 0)
-        let material = SCNMaterial() // マテリアル（表面）を生成する
-        material.diffuse.contents = randomColor()
-        node.geometry?.materials = [material] // 表面の情報をノードに適用
+        let baseView = customView(frame: view.bounds)
+        guard let image = createImage(view: baseView) else { return }
+        let node = WebNode(image: image, panelColor: UIColor.green, width: 0.5)
         
-        let position = SCNVector3(x: 0, y: 0, z: -0.5) // ノードの位置は、左右：0m 上下：0m　奥に50cm
+        let position = SCNVector3(x: 0, y: 0, z: -1) // ノードの位置は、左右：0m 上下：0m　奥に100cm
         if let camera = sceneView.pointOfView {
             node.position = camera.convertPosition(position, to: nil) // カメラ位置からの偏差で求めた位置
         }
         sceneView.scene.rootNode.addChildNode(node) // 生成したノードをシーンに追加する
     }
     
-    // ランダムな色の生成
-    func randomColor() -> UIColor {
-        let red = CGFloat(arc4random() % 10) * 0.1
-        let green = CGFloat(arc4random() % 10) * 0.1
-        let blue = CGFloat(arc4random() % 10) * 0.1
-        return UIColor(red: red, green: green, blue: blue, alpha: 1)
-        
+    /// view to image
+    func createImage(view:UIView) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(view.frame.size, false, 0)
+        guard let context = UIGraphicsGetCurrentContext() else {
+            return nil
+        }
+        view.isHidden = false // 画像を取得する間だけ表示
+        view.layer.render(in: context)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        view.isHidden = true // 再び非表示
+        return image
     }
 }
