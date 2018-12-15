@@ -13,16 +13,15 @@ import WebKit
 
 class WebNode: SCNNode {
     
-    init(image:UIImage, panelColor: UIColor, width: CGFloat) {
+    init(image:UIImage, width: CGFloat) {
         super.init()
-//        node.geometry = SCNBox(width: 0.2, height: 0.1, length: 0, chamferRadius: 0)
         let panelNode = SCNNode(geometry: SCNBox(width: width, height: width * 0.5, length: 0, chamferRadius: 0))
         
         let material_front = SCNMaterial()
         material_front.diffuse.contents = image
         let material_other = SCNMaterial()
-        material_other.diffuse.contents = panelColor
-        panelNode.geometry?.materials = [material_front, material_other, material_other, material_other, material_other, material_other]
+        material_other.diffuse.contents = UIColor.clear
+        panelNode.geometry?.materials = [material_front, material_other, material_front, material_other, material_other, material_other]
         
         addChildNode(panelNode)
     }

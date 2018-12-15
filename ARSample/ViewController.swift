@@ -40,7 +40,7 @@ class ViewController: UIViewController {
         hogeView.removeFromParentNode()
         let baseView = customView(frame: view.bounds)
         guard let image = createImage(view: baseView) else { return }
-        let node = WebNode(image: image, panelColor: UIColor.green, width: 0.5)
+        let node = WebNode(image: image, width: 0.6)
         
         let position = SCNVector3(x: 0, y: 0, z: -1) // ノードの位置は、左右：0m 上下：0m　奥に100cm
         if let camera = sceneView.pointOfView {
